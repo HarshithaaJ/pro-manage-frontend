@@ -1,0 +1,153 @@
+.task_card {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 20px;
+    background-color: #FFF;
+    padding: 0.2rem 1.2rem 1.2rem;
+
+    .header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        >span:first-child {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+
+            span {
+                font-size: 1.8rem;
+                margin-right: 3px;
+            }
+        }
+
+        >div {
+            position: relative;
+            
+            >span {
+                height: 1rem;
+                display: flex;
+                align-items: center;
+                font-size: 1.5rem;
+                font-weight: 600;
+                cursor: pointer;
+            }
+        }
+
+    }
+    
+    >h3 {
+        margin: 0;
+        font-weight: 500;
+    }
+
+    .tooltip {
+        max-width: 18.5rem;
+        background-color: #1782b8b0;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 1rem;
+        color: #FFF;
+    }
+
+    .all_checklist {
+        margin-top: 1rem;
+        width: 100%;
+        font-family: "Inter", sans-serif;
+        
+        >div:first-child {
+            display: flex;
+            justify-content: space-between;
+
+            h4 {
+                margin: 0;
+                font-weight: 500;
+            }
+
+            span {
+                height: 1.5rem;
+                width: 1.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #EEECEC;
+                cursor: pointer;
+            }
+        }
+
+        >div:nth-child(2) {
+            width: 100%;
+            margin-top: 0.8rem;
+
+            .checklist {
+                box-sizing: border-box;
+                width: 100%;
+                border-radius: 12px;
+                border: 1px solid #E2E2E2;
+                padding: 0 0.5rem;
+                display: flex;
+                gap: 5px;
+                align-items: center;
+                margin-bottom: 0.5rem;
+    
+                input[type="checkbox"] {
+                    appearance: none;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    min-height: 1.2rem;
+                    min-width: 1.2rem;
+                    outline: none;
+                    border: 2px solid #E2E2E2;
+                    border-radius: 6px;
+                    cursor: pointer;
+
+                    &:checked {
+                        background-color: var(--aqua-main);
+                        border: none;
+                    }
+                    
+                    &:checked::after {
+                        content: '\2713';
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        color: #FFF;
+                        font-weight: 600;
+                    }
+                }
+                
+            }
+        }
+
+
+    }
+
+    .footer {
+        width: 100%;
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+
+        >div:first-child {
+            font-size: 10px;
+            padding: 4px 6px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        >div:nth-child(2) {
+            display: flex;
+            gap: 8px;
+
+            span {
+                padding: 6px 8px;
+                border-radius: 0.5rem;
+                font-size: 10px;
+                background-color: #EEECEC;
+                cursor: pointer;
+            }
+        }
+    }
+}

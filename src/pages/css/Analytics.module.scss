@@ -1,0 +1,42 @@
+.analytics {
+    padding-left: 2.5rem;
+    
+    h3 {
+        font-weight: 600;
+    }
+
+    main {
+        width: 100%;
+        display: flex;
+        gap: 1rem;
+        
+        .data {
+            width: 30%;
+            border-radius: 12px;
+            background-color: #F9FCFF;
+            padding: 1rem 1.5rem;
+
+            div {
+                display: flex;
+                justify-content: space-between;
+                max-height: 3rem;
+
+                h3, p {
+                    margin: 0;
+                    display: flex;
+                    align-items: center;
+                }
+
+                p {
+                    font-size: 1rem;
+
+                    span {
+                        color: #90C4CC;
+                        font-size: 2.5rem;
+                        margin-right: 8px;
+                    }
+                }
+            }
+        }
+    }
+}

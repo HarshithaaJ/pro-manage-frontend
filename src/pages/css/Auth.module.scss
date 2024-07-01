@@ -1,0 +1,112 @@
+.auth {
+    font-family: "Open Sans", sans-serif;
+    width: 35vw;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    main {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        h1 {
+            margin-bottom: 5rem;
+            font-weight: 600;
+        }
+
+        form {
+            width: 70%;
+
+            .form_input {
+                color: #828282;
+                display: flex;
+                gap: 0.5rem;
+                box-sizing: border-box;
+                width: 100%;
+                border: 2px solid #D0D0D0;
+                border-radius: 0.6rem;
+                padding: 0.3rem;
+                padding-right: 0.5rem;
+                margin-top: 1rem;
+
+                svg {
+                    font-size: 2rem;
+                    stroke-width: 0.4px;
+                }
+
+                span {
+                    width: 25px;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+
+                    svg {
+                        cursor: pointer;
+                    }
+                }
+
+                input {
+                    font-size: 1.1rem;
+                    width: 100%;
+                    border: none;
+                    outline: none;
+                    color: #000;
+                    font-weight: 700;
+
+                    &::placeholder {
+                        font-size: 1rem;
+                        font-weight: 500;
+                    }
+                }
+
+                &:focus-within {
+                    border-color: black;
+                    color: black;
+                }
+
+                &.red_border {
+                    border-color: #CF3636;
+                }
+            }
+
+            >div {
+                .error {
+                    color: #CF3636;
+                    margin-top: 3px;
+                    margin-left: 3px;
+                    font-size: 0.9rem;
+                }
+            }
+
+
+            >p {
+                color: #CF3636;
+                text-align: center;
+                font-size: 1rem;
+            }
+
+        }
+
+        section {
+            width: 70%;
+            text-align: center;
+
+            p {
+                color: #828282;
+                font-size: 1.1rem;
+                margin: 0;
+            }
+
+            button {
+                background-color: transparent;
+                border: 2px solid var(--aqua-main);
+                color: var(--aqua-main);
+                padding: 0.6rem 0;
+                margin-top: 1.5rem;
+            }
+        }
+
+    }
+}
