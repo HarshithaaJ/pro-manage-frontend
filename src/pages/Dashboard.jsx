@@ -1,94 +1,98 @@
 import styles from "./css/Dashboard.module.scss";
-import {useAuth} from "../context/user.context";
-import {format} from "date-fns";
+import { useAuth } from "../context/user.context";
+import { format } from "date-fns";
 import Container from "../components/board/Container";
-import Select from "../components/form-inputs/Select"
+import Select from "../components/form-inputs/Select";
 import { useEffect, useState } from "react";
-import {useOutletContext} from "react-router-dom";
-import {getAllTasks, updateTaskChecklist, updateTaskState} from "../apis/tasks";
+import { useOutletContext } from "react-router-dom";
+import { getAllTasks, updateTaskChecklist, updateTaskState } from "../apis/tasks";
 import { IoIosArrowDown } from "react-icons/io";
 
 const formattedDate = format(new Date(), "do MMM, yyyy");
 const tasksState = [
-  {title: "Backlog", dataIndex: "backlog"},
-  {title: "To do", dataIndex: "to-do"},
-  {title: "In progress", dataIndex: "progress"},
-  {title: "Done", dataIndex: "done"},
+  { title: "Backlog", dataIndex: "backlog" },
+  { title: "To do", dataIndex: "to-do" },
+  { title: "In progress", dataIndex: "progress" },
+  { title: "Done", dataIndex: "done" },
 ];
 const durationOptions = [
-  {title: "Today", value: "Today"},
-  {title: "This Week", value: "Week"},
-  {title: "This Month", value: "Month"},
-]
+  { title: "Today", value: "Today" },
+  { title: "This Week", value: "Week" },
+  { title: "This Month", value: "Month" },
+];
 
 function Dashboard() {
-  const {user: {name: username}} = useAuth();
+  const { user: { name: username } } = useAuth();
   const [duration, setDuration] = useState("Week");
   const [loading, setLoading] = useState(true);
   const [tasksData, setTasksData] = useState({
     "backlog": [], "to-do": [], "progress": [], "done": []
   });
   const [showDurationSelect, setShowDurationSelect] = useState(false);
-  const {notifyError, showPopupModal} = useOutletContext();
+  const { notifyError, showPopupModal } = useOutletContext();
 
-  useEffect(()=> {
+  useEffect(() => {
     setLoading(true);
-    ;(async ()=> {
-      const {data: tasks, error} = await getAllTasks(duration);
-      if(error) {
+    (async () => {
+      const { data: tasks, error } = await getAllTasks(duration);
+      if (error) {
         notifyError("Something went wrong");
         setLoading(false);
         return;
       }
-  
+
       setTasksData(tasks);
       setLoading(false);
     })();
-  }, [duration])
+  }, [duration]);
 
-  const moveTaskToState = async(from, to, task, taskId)=> {
-    const {error} = await updateTaskState(to, taskId);
-    if(error) {
+  useEffect(() => {
+    console.log("Tasks Data in Dashboard:", tasksData);
+  }, [tasksData]);
+
+  const moveTaskToState = async (from, to, task, taskId) => {
+    const { error } = await updateTaskState(to, taskId);
+    if (error) {
       notifyError("Error occurred while moving the task");
       return;
     }
 
     task.state = to;
-    setTasksData((prev)=> {
+    setTasksData((prev) => {
       return {
         ...prev,
-        [from]: prev[from].filter((task)=> task._id !== taskId),
+        [from]: prev[from].filter((task) => task._id !== taskId),
         [to]: [...prev[to], task]
-      }
-    })
-  }
-  
-  const addTask = (task)=> {
-    setTasksData((prev)=> ({...prev, "to-do": [...prev["to-do"], task]}))
-  }
-  
-  const updateTask = (to, newTask, taskId)=> {
-    setTasksData((prev)=> {
+      };
+    });
+  };
+
+  const addTask = (task) => {
+    setTasksData((prev) => ({ ...prev, "to-do": [...prev["to-do"], task] }));
+  };
+
+  const updateTask = (to, newTask, taskId) => {
+    setTasksData((prev) => {
       return {
         ...prev,
-        [to]: prev[to].map((task)=> task._id === taskId ? newTask : task),
-      }
-    }) 
-  }
+        [to]: prev[to].map((task) => task._id === taskId ? newTask : task),
+      };
+    });
+  };
 
-  const deleteTask = (from, taskId)=> {
-    setTasksData((prev)=> {
+  const deleteTask = (from, taskId) => {
+    setTasksData((prev) => {
       return {
         ...prev,
-        [from]: prev[from].filter((task)=> task._id !== taskId),
-      }
-    }) 
-  }
+        [from]: prev[from].filter((task) => task._id !== taskId),
+      };
+    });
+  };
 
-  const toggleCheck = async(to, taskId, checklistId, isChecked)=> {
-    const {error} = await updateTaskChecklist(taskId, checklistId, isChecked);
-    if(error) {
-      notifyError("Something went wrong") 
+  const toggleCheck = async (to, taskId, checklistId, isChecked) => {
+    const { error } = await updateTaskChecklist(taskId, checklistId, isChecked);
+    if (error) {
+      notifyError("Something went wrong");
       return;
     }
 
@@ -97,14 +101,13 @@ function Dashboard() {
       [to]: prev[to].map((task) =>
         task._id === taskId
           ? {
-              ...task,
-              checklists: task.checklists.map((list) => list._id === checklistId ? { ...list, isChecked } : list),
-            }
+            ...task,
+            checklists: task.checklists.map((list) => list._id === checklistId ? { ...list, isChecked } : list),
+          }
           : task
       ),
     }));
-
-  }
+  };
 
   return (
     <div className={styles.dashboard}>
@@ -163,4 +166,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard
+export default Dashboard;
