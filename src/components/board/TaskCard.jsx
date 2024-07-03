@@ -178,17 +178,19 @@ function TaskCard({
           <span></span>
         )}
         <div>
-          {stateOptions.map((state) =>
+          {stateOptions.map((state) => 
             state.dataIndex !== task.state ? (
+              
               <span
                 key={state.dataIndex}
                 onClick={() =>
                   moveTaskToState(task.state, state.dataIndex, task, task._id)
+                
                 }
               >
                 {state.title}
               </span>
-            ) : (
+  ) : (
               ""
             )
           )}
