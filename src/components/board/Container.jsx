@@ -20,7 +20,7 @@ function Container({
   const [collapseAll, setCollapseAll] = useState(true);
 
   useEffect(() => {
-    console.log("Tasks in Container:", tasks);
+  console.log("Tasks in Container:", tasks);
   }, [tasks]);
 
   return (

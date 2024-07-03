@@ -51,7 +51,7 @@ function Dashboard() {
   }, [tasksData]);
 
   const moveTaskToState = async (from, to, task, taskId) => {
-    const { error } = await updateTaskState(to, taskId);
+    const { error } = await updateTaskState(to, taskId)
     if (error) {
       notifyError("Error occurred while moving the task");
       return;

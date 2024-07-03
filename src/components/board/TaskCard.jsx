@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import styles from "../css/TaskCard.module.scss";
-import {format, isPast, isToday} from "date-fns";
+import {format, isPast, isToday, set} from "date-fns";
 import {BsThreeDots} from "react-icons/bs";
 import {Tooltip} from "react-tooltip";
 import { IoIosArrowDown } from "react-icons/io";
@@ -145,6 +145,7 @@ function TaskCard({
             <IoIosArrowDown
               style={{
                 transform: showChecklist ? "rotate(180deg)" : "rotate(0deg)",
+                
               }}
             />
           </span>
@@ -184,13 +185,13 @@ function TaskCard({
               <span
                 key={state.dataIndex}
                 onClick={() =>
-                  moveTaskToState(task.state, state.dataIndex, task, task._id)
-                
+                  moveTaskToState(task.state, state.dataIndex, task, task._id) 
+                  
                 }
               >
                 {state.title}
               </span>
-  ) : (
+               ) : (
               ""
             )
           )}
