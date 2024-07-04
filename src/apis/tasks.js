@@ -43,7 +43,7 @@ export const updateTaskState = async (newState, taskId)=> {
 
     try {
         const response = await axios.patch(`${backendUrl}/tasks/state/${taskId}`, {
-            state: newState
+             state: newState
         }, {
             headers: {
                 Authorization: `Bearer ${accessToken}`

@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import styles from "../css/TaskCard.module.scss";
-import {format, isPast, isToday, set} from "date-fns";
-import {BsThreeDots} from "react-icons/bs";
-import {Tooltip} from "react-tooltip";
+import { format, isPast, isToday, set } from "date-fns";
+import { BsThreeDots } from "react-icons/bs";
+import { Tooltip } from "react-tooltip";
 import { IoIosArrowDown } from "react-icons/io";
 import Select from "../form-inputs/Select";
 import TaskForm from "./TaskForm";
@@ -16,10 +16,10 @@ const priorityColors = {
 }
 
 const stateOptions = [
-  {title: "BACKLOG", dataIndex: "backlog"},
-  {title: "TO-DO", dataIndex: "to-do"},
-  {title: "PROGRESS", dataIndex: "progress"},
-  {title: "DONE", dataIndex: "done"},
+  { title: "BACKLOG", dataIndex: "backlog" },
+  { title: "TO-DO", dataIndex: "to-do" },
+  { title: "PROGRESS", dataIndex: "progress" },
+  { title: "DONE", dataIndex: "done" },
 ]
 
 function TaskCard({
@@ -34,35 +34,40 @@ function TaskCard({
 }) {
   const [showChecklist, setShowChecklist] = useState(false);
   const [showTaskOptions, setShowTaskOptions] = useState(false);
-  const {notifySuccess} = useOutletContext();
+  const { notifySuccess } = useOutletContext();
 
-  useEffect(()=> {
-    if(collapseAll) setShowChecklist(false);
+  useEffect(() => {
+    if (collapseAll) setShowChecklist(false);
+    else setShowChecklist(true);
   }, [collapseAll])
 
-  const [isDue, formattedDate] = useMemo(()=> {
+  const [isDue, formattedDate] = useMemo(() => {
     const date = task.dueDate ? format(new Date(task.dueDate), "MMM do") : "";
     const isDatePast = task.dueDate ? isPast(task.dueDate) && !isToday(task.dueDate) : false;
 
     return [isDatePast, date];
   }, [task])
 
-  const handleShareTask = ()=> {
+  const handleShareTask = () => {
     notifySuccess("Link Copied");
     navigator.clipboard.writeText(`${window.location.origin}/view/${task._id}`);
   }
 
-  const handleTaskOperation = (taskFunction)=> {
+  const handleTaskOperation = (taskFunction) => {
     taskFunction();
     setShowTaskOptions(false);
   }
 
-  const toggleChecklist = ()=> {
-    !showChecklist && setCollapseAll(false);
-    setShowChecklist((prev) => !prev);
+  const toggleChecklist = () => {
+   ! showChecklist && setCollapseAll(false)  ;
+   setShowChecklist((prev) => !prev);
+  
+    
+    
+    
   }
 
-  const selectBgColor = (isPast)=> {
+  const selectBgColor = (isPast) => {
     return task.state === "done" ? "#63C05B" : (isPast ? "#CF3636" : "#DBDBDB")
   }
 
@@ -149,7 +154,7 @@ function TaskCard({
               }}
             />
           </span>
-        </div>
+          </div>
         {showChecklist && (
           <div>
             {task.checklists.map((list) => (
@@ -157,7 +162,7 @@ function TaskCard({
                 <input
                   type="checkbox"
                   checked={list.isChecked}
-                  onChange={(e)=> toggleCheck(task.state, task._id, list._id, e.target.checked)}
+                  onChange={(e) => toggleCheck(task.state, task._id, list._id, e.target.checked)}
                 />
                 <p>{list.description}</p>
               </div>
@@ -179,19 +184,19 @@ function TaskCard({
           <span></span>
         )}
         <div>
-          {stateOptions.map((state) => 
+          {stateOptions.map((state) =>
             state.dataIndex !== task.state ? (
-              
+
               <span
                 key={state.dataIndex}
                 onClick={() =>
-                  moveTaskToState(task.state, state.dataIndex, task, task._id) 
-                  
+                  moveTaskToState(task.state, state.dataIndex, task, task._id)
+
                 }
               >
                 {state.title}
               </span>
-               ) : (
+            ) : (
               ""
             )
           )}
