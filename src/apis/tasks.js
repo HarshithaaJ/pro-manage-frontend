@@ -50,6 +50,8 @@ export const updateTaskState = async (newState, taskId)=> {
             }
         });
 
+      
+
         if(response.status !== 204) throw new Error();
         return {data: "State updated successfully", error: ""}
     } catch (error) {

@@ -39,7 +39,7 @@ function TaskCard({
   useEffect(() => {
     if (collapseAll) setShowChecklist(false);
     else setShowChecklist(true);
-  }, [collapseAll])
+  }, [collapseAll]);
 
   const [isDue, formattedDate] = useMemo(() => {
     const date = task.dueDate ? format(new Date(task.dueDate), "MMM do") : "";
@@ -59,13 +59,10 @@ function TaskCard({
   }
 
   const toggleChecklist = () => {
-   ! showChecklist && setCollapseAll(false)  ;
-   setShowChecklist((prev) => !prev);
-  
-    
-    
-    
+   !showChecklist && setCollapseAll(false);
+    setShowChecklist((prev) => !prev); 
   }
+  
 
   const selectBgColor = (isPast) => {
     return task.state === "done" ? "#63C05B" : (isPast ? "#CF3636" : "#DBDBDB")
@@ -146,11 +143,15 @@ function TaskCard({
             )}/${task.checklists.length}`}
             )
           </h4>
-          <span onClick={toggleChecklist}>
+          <span
+            onClick={(e) => {
+              //  e.stopPropagation(true);
+              toggleChecklist();
+            }}
+          >
             <IoIosArrowDown
               style={{
                 transform: showChecklist ? "rotate(180deg)" : "rotate(0deg)",
-                
               }}
             />
           </span>
@@ -186,13 +187,12 @@ function TaskCard({
         <div>
           {stateOptions.map((state) =>
             state.dataIndex !== task.state ? (
-
-              <span
+                <span
                 key={state.dataIndex}
                 onClick={() =>
                   moveTaskToState(task.state, state.dataIndex, task, task._id)
-
                 }
+               
               >
                 {state.title}
               </span>
