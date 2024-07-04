@@ -1,6 +1,6 @@
-import { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import styles from "../css/TaskCard.module.scss";
-import { format, isPast, isToday, set } from "date-fns";
+import { format, isPast, isToday } from "date-fns";
 import { BsThreeDots } from "react-icons/bs";
 import { Tooltip } from "react-tooltip";
 import { IoIosArrowDown } from "react-icons/io";
@@ -8,6 +8,7 @@ import Select from "../form-inputs/Select";
 import TaskForm from "./TaskForm";
 import DeletePopup from "./DeletePopup";
 import { useOutletContext } from "react-router-dom";
+import Spinner from '../Spinner';
 
 const priorityColors = {
   low: "#63C05B",
@@ -34,6 +35,7 @@ function TaskCard({
 }) {
   const [showChecklist, setShowChecklist] = useState(false);
   const [showTaskOptions, setShowTaskOptions] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { notifySuccess } = useOutletContext();
 
   useEffect(() => {
@@ -46,27 +48,53 @@ function TaskCard({
     const isDatePast = task.dueDate ? isPast(task.dueDate) && !isToday(task.dueDate) : false;
 
     return [isDatePast, date];
-  }, [task])
+  }, [task]);
 
   const handleShareTask = () => {
     notifySuccess("Link Copied");
     navigator.clipboard.writeText(`${window.location.origin}/view/${task._id}`);
-  }
+  };
 
   const handleTaskOperation = (taskFunction) => {
     taskFunction();
     setShowTaskOptions(false);
-  }
+  };
 
   const toggleChecklist = () => {
-   !showChecklist && setCollapseAll(false);
+    if (!showChecklist) setCollapseAll(false);
     setShowChecklist((prev) => !prev); 
-  }
-  
+  };
 
   const selectBgColor = (isPast) => {
-    return task.state === "done" ? "#63C05B" : (isPast ? "#CF3636" : "#DBDBDB")
-  }
+    return task.state === "done" ? "#63C05B" : (isPast ? "#CF3636" : "#DBDBDB");
+  };
+
+  const handleMoveTask = (currentState, newState, task, taskId) => {
+    setLoading(true);
+
+    setTimeout(async () => {
+      try {
+        await moveTaskToState(currentState, newState, task, taskId);
+      } catch (error) {
+        console.error('Error moving task:', error);
+      }
+      setLoading(false);
+    }, 1000); 
+  };
+
+  const debounceToggleCheck = useCallback(debounce(async (state, taskId, checklistId, checked) => {
+    try {
+      await toggleCheck(state, taskId, checklistId, checked);
+    } catch (error) {
+      console.error('Error toggling checklist:', error);
+    }
+    setLoading(false);
+  }, 300), []);
+
+  const handleToggleCheck = (state, taskId, checklistId, checked) => {
+    setLoading(true);
+    debounceToggleCheck(state, taskId, checklistId, checked);
+  };
 
   return (
     <div className={styles.task_card}>
@@ -145,7 +173,7 @@ function TaskCard({
           </h4>
           <span
             onClick={(e) => {
-              //  e.stopPropagation(true);
+              e.stopPropagation(true);
               toggleChecklist();
             }}
           >
@@ -155,7 +183,7 @@ function TaskCard({
               }}
             />
           </span>
-          </div>
+        </div>
         {showChecklist && (
           <div>
             {task.checklists.map((list) => (
@@ -163,7 +191,7 @@ function TaskCard({
                 <input
                   type="checkbox"
                   checked={list.isChecked}
-                  onChange={(e) => toggleCheck(task.state, task._id, list._id, e.target.checked)}
+                  onChange={(e) => handleToggleCheck(task.state, task._id, list._id, e.target.checked)}
                 />
                 <p>{list.description}</p>
               </div>
@@ -187,12 +215,11 @@ function TaskCard({
         <div>
           {stateOptions.map((state) =>
             state.dataIndex !== task.state ? (
-                <span
+              <span
                 key={state.dataIndex}
                 onClick={() =>
-                  moveTaskToState(task.state, state.dataIndex, task, task._id)
+                  handleMoveTask(task.state, state.dataIndex, task, task._id)
                 }
-               
               >
                 {state.title}
               </span>
@@ -202,8 +229,22 @@ function TaskCard({
           )}
         </div>
       </div>
+      {loading && (
+        <div className={styles.spinner_container}>
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 }
 
-export default TaskCard
+// Utility function for debouncing
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
+
+export default TaskCard;
