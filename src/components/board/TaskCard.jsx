@@ -40,8 +40,11 @@ function TaskCard({
 
   useEffect(() => {
     if (collapseAll) setShowChecklist(false);
-    else setShowChecklist(true);
-  }, [collapseAll]);
+
+   else setShowChecklist(true);
+   }, [collapseAll]);
+
+  
 
   const [isDue, formattedDate] = useMemo(() => {
     const date = task.dueDate ? format(new Date(task.dueDate), "MMM do") : "";
@@ -182,8 +185,8 @@ function TaskCard({
           </h4>
           <span
             onClick={(e) => {
-              e.stopPropagation(true);
-              toggleChecklist();
+              // e.stopPropagation(true);
+               toggleChecklist();
             }}
           >
             <IoIosArrowDown
