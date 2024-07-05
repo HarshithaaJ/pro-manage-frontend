@@ -61,8 +61,8 @@ function TaskCard({
   };
 
   const toggleChecklist = () => {
-    if (!showChecklist) setCollapseAll(false);
-    setShowChecklist((prev) => !prev); 
+    !showChecklist && setCollapseAll(false);
+    setShowChecklist((prev) => !prev);
   };
 
   const selectBgColor = (isPast) => {
@@ -79,7 +79,7 @@ function TaskCard({
         console.error('Error moving task:', error);
       }
       setLoading(false);
-    }, 1000); 
+    }, 1000);
   };
 
   const debounceToggleCheck = useCallback(debounce(async (state, taskId, checklistId, checked) => {
@@ -88,13 +88,22 @@ function TaskCard({
     } catch (error) {
       console.error('Error toggling checklist:', error);
     }
-    setLoading(false);
-  }, 300), []);
+    // setLoading(false);
+  } ),[]);
 
   const handleToggleCheck = (state, taskId, checklistId, checked) => {
-    setLoading(true);
+    // setLoading(true);
     debounceToggleCheck(state, taskId, checklistId, checked);
   };
+  // const MyComponent = ({ state, taskId, checklistId, checked }) => {
+  //   const handleToggleCheck = async (state, taskId, checklistId) => {
+  //     try {
+  //       await toggleCheck(state, taskId, checklistId, checked);
+  //     } catch (error) {
+  //       console.error('Error toggling checklist:', error);
+  //     }
+  //   };
+  // }
 
   return (
     <div className={styles.task_card}>
@@ -238,7 +247,7 @@ function TaskCard({
   );
 }
 
-// Utility function for debouncing
+
 function debounce(func, wait) {
   let timeout;
   return function(...args) {
@@ -247,4 +256,5 @@ function debounce(func, wait) {
   };
 }
 
-export default TaskCard;
+
+export default TaskCard
