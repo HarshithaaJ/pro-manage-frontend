@@ -89,6 +89,7 @@ function TaskCard({
   };
 
   const debounceToggleCheck = useCallback(debounce(async (state, taskId, checklistId, checked) => {
+    
     try {
       await toggleCheck(state, taskId, checklistId, checked);
     } catch (error) {
@@ -188,9 +189,10 @@ function TaskCard({
           </h4>
           <span
             onClick={(e) => {
-              //  e.stopPropagation();
-               toggleChecklist();
-            }}
+              e.stopPropagation(true);
+              toggleChecklist();
+             
+          }}
           >
             <IoIosArrowDown
               style={{
@@ -207,7 +209,8 @@ function TaskCard({
                   type="checkbox"
                   checked={list.isChecked}
                   onChange={(e) => handleToggleCheck(task.state, task._id, list._id, e.target.checked)}
-                />
+                 
+               />
                 <p>{list.description}</p>
               </div>
             ))}

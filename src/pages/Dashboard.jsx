@@ -90,11 +90,7 @@ function Dashboard() {
   };
 
   const toggleCheck = async (to, taskId, checklistId, isChecked) => {
-    const { error } = await updateTaskChecklist(taskId, checklistId, isChecked);
-    if (error) {
-      notifyError("Something went wrong");
-      return;
-    }
+   
 
     setTasksData((prev) => ({
       ...prev,
@@ -107,6 +103,12 @@ function Dashboard() {
           : task
       ),
     }));
+    
+    const { error } = await updateTaskChecklist(taskId, checklistId, isChecked);
+    if (error) {
+      notifyError("Something went wrong");
+      return;
+    }
   };
 
   return (
