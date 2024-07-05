@@ -38,11 +38,14 @@ function TaskCard({
   const [loading, setLoading] = useState(false);
   const { notifySuccess } = useOutletContext();
 
+  
   useEffect(() => {
-    if (collapseAll) setShowChecklist(false);
-
-   else setShowChecklist(true);
-   }, [collapseAll]);
+    if (collapseAll) {
+      setShowChecklist(false);
+    } else {
+      setShowChecklist(true);
+    }
+  });
 
   
 
@@ -185,7 +188,7 @@ function TaskCard({
           </h4>
           <span
             onClick={(e) => {
-              // e.stopPropagation(true);
+              //  e.stopPropagation();
                toggleChecklist();
             }}
           >
