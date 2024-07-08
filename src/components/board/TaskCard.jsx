@@ -88,20 +88,20 @@ function TaskCard({
     }, 1000);
   };
 
-  const debounceToggleCheck = useCallback(debounce(async (state, taskId, checklistId, checked) => {
+  // const debounceToggleCheck = useCallback(debounce(async (state, taskId, checklistId, checked) => {
     
-    try {
-      await toggleCheck(state, taskId, checklistId, checked);
-    } catch (error) {
-      console.error('Error toggling checklist:', error);
-    }
-    // setLoading(false);
-  } ),[]);
+  //   try {
+  //     await toggleCheck(state, taskId, checklistId, checked);
+  //   } catch (error) {
+  //     console.error('Error toggling checklist:', error);
+  //   }
+  //   // setLoading(false);
+  // } ),[]);
 
-  const handleToggleCheck = (state, taskId, checklistId, checked) => {
-    // setLoading(true);
-    debounceToggleCheck(state, taskId, checklistId, checked);
-  };
+  // const handleToggleCheck = (state, taskId, checklistId, checked) => {
+  //   // setLoading(true);
+  //   debounceToggleCheck(state, taskId, checklistId, checked);
+  // };
   // const MyComponent = ({ state, taskId, checklistId, checked }) => {
   //   const handleToggleCheck = async (state, taskId, checklistId) => {
   //     try {
@@ -208,7 +208,7 @@ function TaskCard({
                 <input
                   type="checkbox"
                   checked={list.isChecked}
-                  onChange={(e) => handleToggleCheck(task.state, task._id, list._id, e.target.checked)}
+                  onChange={(e) => toggleCheck(task.state, task._id, list._id, e.target.checked)}
                  
                />
                 <p>{list.description}</p>
@@ -257,13 +257,13 @@ function TaskCard({
 }
 
 
-function debounce(func, wait) {
-  let timeout;
-  return function(...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
-}
+// function debounce(func, wait) {
+//   let timeout;
+//   return function(...args) {
+//     clearTimeout(timeout);
+//     timeout = setTimeout(() => func.apply(this, args), wait);
+//   };
+// }
 
 
 export default TaskCard
