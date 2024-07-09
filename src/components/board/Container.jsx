@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import TaskForm from "./TaskForm";
 import { v4 as uuidv4 } from 'uuid';
 
+
 function Container({
   tasks = [],
   title = "",
@@ -18,12 +19,25 @@ function Container({
   toggleCheck,
 }) {
   const [collapseAll, setCollapseAll] = useState(true);
+  //  const [cards,setCards] = useState();
 
   useEffect(() => {
   console.log("Tasks in Container:", tasks);
   }, [tasks]);
 
+
+ 
+  // function TaskCard(e) {
+  //   var text = document.getElementById('Tasks',tasks);                       
+  //   window.Clipboard.setData('Text', text); 
+    
+  // }
+  
+  
+ 
   return (
+    
+   
     <div className={styles.tasks_container}>
       <div className={styles.container_title}>
         <h3>{title}</h3>
@@ -36,13 +50,16 @@ function Container({
           </span>
         </div>
       </div>
-      <main>
+      <main   >
+      {/* onDrop={(e)=>{TaskCard(e)}} */}
         {!loading ? (
           tasks.map((task) => {
              const uniqueKey = uuidv4();
           //  console.log('Task Key:', uniqueKey);
+          
             return (
-              <TaskCard
+              
+              <TaskCard 
                 deleteTask={deleteTask}
                 updateTask={updateTask}
                 showPopupModal={showPopupModal}
@@ -54,17 +71,39 @@ function Container({
                 toggleCheck={toggleCheck}
               />
             );
-          })
+        
+          })  
+          
         ) : (
           <div className={styles.task_skeleton}>
             <div />
           </div>
         )}
+      
       </main>
     </div>
-  );
+  
+  
+  
+  
+  
+  ) ;
 }
+ // const moveCard = useCallback((dragIndex, hoverIndex) => {
+  //   setCard((prevCards) =>
+  //     update(prevCards, {
+  //       $splice: [
+  //         [dragIndex, 1],
+  //         [hoverIndex, 0, prevCards[dragIndex]],
+  //       ],
+  //     }),
+  //   )
+  // }, [])
 
+  // const moveCard = useCallback((dragIndex, hoverIndex) => {
+  //   setCards((prev) =>
+  //    ({ ...prev, hoverIndex: [...prev[hoverIndex], dragIndex] }));
+  // }, []);
 export default Container;
 
 

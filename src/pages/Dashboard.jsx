@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { getAllTasks, updateTaskChecklist, updateTaskState } from "../apis/tasks";
 import { IoIosArrowDown } from "react-icons/io";
+// import { DndProvider } from 'react-dnd';
+// import { HTML5Backend } from 'react-dnd-html5-backend';
+//
 
 const formattedDate = format(new Date(), "do MMM, yyyy");
 const tasksState = [
@@ -91,7 +94,6 @@ function Dashboard() {
 
   const toggleCheck = async (to, taskId, checklistId, isChecked) => {
    
-
     setTasksData((prev) => ({
       ...prev,
       [to]: prev[to].map((task) =>
@@ -109,6 +111,7 @@ function Dashboard() {
       notifyError("Something went wrong");
       return;
     }
+    
   };
 
   return (
@@ -147,6 +150,7 @@ function Dashboard() {
           </div>
         </section>
       </section>
+      {/* <DndProvider backend={HTML5Backend}> */}
       <main className={styles.states_container}>
         {tasksState.map((state) => (
           <div key={state.dataIndex}>
@@ -164,6 +168,7 @@ function Dashboard() {
           </div>
         ))}
       </main>
+      {/* </DndProvider> */}
     </div>
   );
 }
