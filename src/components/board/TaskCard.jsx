@@ -150,15 +150,15 @@ function TaskCard({
   
 function TaskCard(e) {
   e.preventDefault();
-  var data = e.dataTransfer.getData(task);
-  e.target.appendChild(document.getElementById(data));
+  var data = e.dataTransfer.getData(moveTaskToState);
+   e.target.appendChild(document.getElementById(data));
 }
   
   
  
   return (
     
-    <div onDragOver={(e)=>{moveTaskToState(e) }}
+    <div onDragOver={(e)=>{TaskCard(e) }}
      draggable='true' 
      id={key} 
      className={styles.task_card } >

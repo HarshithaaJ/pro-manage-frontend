@@ -28,7 +28,7 @@ function Container({
 
  
   // function TaskCard(e) {
-  //   var text = document.getElementById('Tasks',tasks);                       
+  //   var text = document.getElementById(moveTaskToState);                       
   //   window.Clipboard.setData('Text', text); 
     
   // }
@@ -50,7 +50,7 @@ function Container({
           </span>
         </div>
       </div>
-      <main   >
+      <main  >
       {/* onDrop={(e)=>{TaskCard(e)}} */}
         {!loading ? (
           tasks.map((task) => {
