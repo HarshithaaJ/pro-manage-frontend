@@ -4,7 +4,7 @@ import { IoAdd } from "react-icons/io5";
 import TaskCard from "./TaskCard";
 import { useState, useEffect } from "react";
 import TaskForm from "./TaskForm";
-import { v4 as uuidv4 } from 'uuid';
+ import { v4 as uuidv4 } from 'uuid';
 
 
 function Container({
@@ -17,8 +17,10 @@ function Container({
   updateTask,
   deleteTask,
   toggleCheck,
+  
 }) {
   const [collapseAll, setCollapseAll] = useState(true);
+  const [dragging, setDragging] = useState(false);
   //  const [cards,setCards] = useState();
 
   useEffect(() => {
@@ -26,19 +28,34 @@ function Container({
   }, [tasks]);
 
 
+       const handleDrop = (e) => {
+           e.preventDefault();
+          // const  item = e.dataTransfer.getData('text/plain', e.target.id);
+          //  alert(`Dropped item: ${item}`);
+          //  console.log("dragged item",{item});
+            setDragging(false);
+          
+      
+          
+    const task = e.dataTransfer.getData("text", e.target.id);
+    const newState = title.toUpperCase().replace(" ", "-");
+    if (task.state !== newState) {
+      moveTaskToState(task.state, newState, task,task._id);
+    }
+       }
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
  
-  // function TaskCard(e) {
-  //   var text = document.getElementById(moveTaskToState);                       
-  //   window.Clipboard.setData('Text', text); 
-    
-  // }
-  
   
  
   return (
     
    
-    <div className={styles.tasks_container}>
+    <div className={styles.tasks_container}   >
+       
       <div className={styles.container_title}>
         <h3>{title}</h3>
         <div>
@@ -50,11 +67,11 @@ function Container({
           </span>
         </div>
       </div>
-      <main  >
-      {/* onDrop={(e)=>{TaskCard(e)}} */}
+      <main onDrop={handleDrop}  
+       onDragOver={handleDragOver}>
         {!loading ? (
           tasks.map((task) => {
-             const uniqueKey = uuidv4();
+              const uniqueKey = uuidv4();
           //  console.log('Task Key:', uniqueKey);
           
             return (
@@ -69,6 +86,8 @@ function Container({
                 collapseAll={collapseAll}
                 setCollapseAll={setCollapseAll}
                 toggleCheck={toggleCheck}
+                dragging={dragging}
+                setDragging={setDragging}
               />
             );
         
@@ -89,6 +108,7 @@ function Container({
   
   ) ;
 }
+export default Container;
  // const moveCard = useCallback((dragIndex, hoverIndex) => {
   //   setCard((prevCards) =>
   //     update(prevCards, {
@@ -104,6 +124,6 @@ function Container({
   //   setCards((prev) =>
   //    ({ ...prev, hoverIndex: [...prev[hoverIndex], dragIndex] }));
   // }, []);
-export default Container;
+
 
 

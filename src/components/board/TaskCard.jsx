@@ -39,12 +39,15 @@ function TaskCard({
   updateTask,
   deleteTask,
   toggleCheck,
-  key
+  key,
+  dragging,
+  setDragging
 }) {
   const [showChecklist, setShowChecklist] = useState(false);
   const [showTaskOptions, setShowTaskOptions] = useState(false);
   const [loading, setLoading] = useState(false);
   const { notifySuccess } = useOutletContext();
+  // const [dragging, setDragging] = useState(false);
   
   
 
@@ -83,52 +86,6 @@ function TaskCard({
   };
 
 
-//   const [{ isDragging }, drag] = useDrag(() => ({
-//     type: ItemTypes.TASK,
-//     item: { id: task.id, state: task.state },
-//     end: (item, monitor) => {
-//       const dropResult = monitor.getDropResult();
-//       if (item && dropResult) {
-//         moveTask(item.state, dropResult.state, item.id);
-       
-//           alert(`You dropped ${item.id} into ${dropResult.state}!`)
-         
-//       }
-//     },
-//     collect: (monitor) => ({
-//       isDragging: monitor.isDragging(),
-//     }),
-//   }));
-  
-
-  
-//   const [{ isOver }, drop] = useDrop(() => ({
-//     accept: ItemTypes.TASK,
-//     item: { id: task.id,state: task.state },
-
-//     drop: () => {
-//       moveTaskToState(item.state, newState, item.id);
-//     },
-//     collect: (monitor) => ({
-//       isOver: monitor.isOver(),
-//     }),
-//     hover(item, monitor) {
-//       if (!ref.current) {
-//         return
-//       }
-//       // const dragIndex = newState;
-//       // const hoverIndex = item.state;
-     
-//       // if (dragIndex === hoverIndex) {
-//       //   return
-//       // }
-//     }
-// }));
-  
-//      const opacity = isDragging ? 0.5 : 1;
-//     const backgroundColor = isOver ? '#f0f0f0' : '#ffffff';
-   
-// drag(drop(ref))
 
 
   const handleMoveTask = (currentState, newState, task, taskId) => {
@@ -150,18 +107,33 @@ function TaskCard({
   
 function TaskCard(e) {
   e.preventDefault();
-  var data = e.dataTransfer.getData(moveTaskToState);
-   e.target.appendChild(document.getElementById(data));
+  // const data = e.dataTransfer.setData("text", e.target.id);
+  // console.log(data);
+ 
+    e.dataTransfer.setData('item',e.target.id);
+    
+      setDragging(true);
+    
+ 
+    // e.target.appendChild(document.getElementById(data));
 }
-  
-  
+
+// const handleDragStart = (e) => {
+//   e.preventDefault();
+//   e.dataTransfer.setData("task-id", task._id);
+//   e.dataTransfer.setData("task-state", task.state);
+// };
+
+
  
   return (
     
-    <div onDragOver={(e)=>{TaskCard(e) }}
+    <div  onDragOver={(e)=>{TaskCard(e,'item 1') }}
      draggable='true' 
-     id={key} 
-     className={styles.task_card } >
+      id={key} 
+      onDragEnd={(e) => setDragging(false)}
+      
+      className={styles.task_card}>
       <div  className={styles.header}>
         <span>
           <span style={{ color: priorityColors[task.priority] }}>&bull;</span>{" "}
@@ -315,6 +287,10 @@ function TaskCard(e) {
 }
 
 
+
+
+export default TaskCard
+
 // function debounce(func, wait) {
 //   let timeout;
 //   return function(...args) {
@@ -339,4 +315,50 @@ function TaskCard(e) {
   // };
 
 
-export default TaskCard
+  
+//   const [{ isDragging }, drag] = useDrag(() => ({
+//     type: ItemTypes.TASK,
+//     item: { id: task.id, state: task.state },
+//     end: (item, monitor) => {
+//       const dropResult = monitor.getDropResult();
+//       if (item && dropResult) {
+//         moveTask(item.state, dropResult.state, item.id);
+       
+//           alert(`You dropped ${item.id} into ${dropResult.state}!`)
+         
+//       }
+//     },
+//     collect: (monitor) => ({
+//       isDragging: monitor.isDragging(),
+//     }),
+//   }));
+  
+
+  
+//   const [{ isOver }, drop] = useDrop(() => ({
+//     accept: ItemTypes.TASK,
+//     item: { id: task.id,state: task.state },
+
+//     drop: () => {
+//       moveTaskToState(item.state, newState, item.id);
+//     },
+//     collect: (monitor) => ({
+//       isOver: monitor.isOver(),
+//     }),
+//     hover(item, monitor) {
+//       if (!ref.current) {
+//         return
+//       }
+//       // const dragIndex = newState;
+//       // const hoverIndex = item.state;
+     
+//       // if (dragIndex === hoverIndex) {
+//       //   return
+//       // }
+//     }
+// }));
+  
+//      const opacity = isDragging ? 0.5 : 1;
+//     const backgroundColor = isOver ? '#f0f0f0' : '#ffffff';
+   
+// drag(drop(ref))
