@@ -9,6 +9,7 @@ import TaskForm from "./TaskForm";
 import DeletePopup from "./DeletePopup";
 import { useOutletContext } from "react-router-dom";
 import Spinner from '../Spinner';
+import { getAllTasks } from "../../apis/tasks";
 // import { ItemTypes } from './constants';
 // import { useDrag, useDrop } from 'react-dnd';
 
@@ -110,9 +111,11 @@ function TaskCard(e) {
   // const data = e.dataTransfer.setData("text", e.target.id);
   // console.log(data);
  
-    e.dataTransfer.setData('item',e.target.id);
+    e.dataTransfer.setData("item", { id: task.id, state: task.state });
+    
     
       setDragging(true);
+      console.log(task.state);
     
  
     // e.target.appendChild(document.getElementById(data));
@@ -131,7 +134,7 @@ function TaskCard(e) {
     <div  onDragOver={(e)=>{TaskCard(e,'item 1') }}
      draggable='true' 
       id={key} 
-      onDragEnd={(e) => setDragging(false)}
+      // onDragEnd={(e) => setDragging(false)}
       
       className={styles.task_card}>
       <div  className={styles.header}>

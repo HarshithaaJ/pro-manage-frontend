@@ -7,6 +7,10 @@ import TaskForm from "./TaskForm";
  import { v4 as uuidv4 } from 'uuid';
 
 
+
+
+
+
 function Container({
   tasks = [],
   title = "",
@@ -17,6 +21,9 @@ function Container({
   updateTask,
   deleteTask,
   toggleCheck,
+  
+  
+
   
 }) {
   const [collapseAll, setCollapseAll] = useState(true);
@@ -34,14 +41,20 @@ function Container({
           //  alert(`Dropped item: ${item}`);
           //  console.log("dragged item",{item});
             setDragging(false);
+            
           
       
           
-    const task = e.dataTransfer.getData("text", e.target.id);
+    const task = e.dataTransfer.getData('task',tasks);
+    
+    // e.target.appendChild(document.getElementById(task));
+   
     const newState = title.toUpperCase().replace(" ", "-");
     if (task.state !== newState) {
       moveTaskToState(task.state, newState, task,task._id);
-    }
+      console.log(newState);
+      console.log(task.state);
+      }
        }
 
   const handleDragOver = (e) => {
