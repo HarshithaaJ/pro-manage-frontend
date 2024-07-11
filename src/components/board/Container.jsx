@@ -4,12 +4,9 @@ import { IoAdd } from "react-icons/io5";
 import TaskCard from "./TaskCard";
 import { useState, useEffect } from "react";
 import TaskForm from "./TaskForm";
- import { v4 as uuidv4 } from 'uuid';
-
-
-
-
-
+//  import { v4 as uuidv4 } from 'uuid';
+import { useDrop } from "react-dnd";
+import { ItemTypes } from "./constants"; 
 
 function Container({
   tasks = [],
@@ -21,55 +18,32 @@ function Container({
   updateTask,
   deleteTask,
   toggleCheck,
-  
-  
-
-  
+  state
+ 
 }) {
   const [collapseAll, setCollapseAll] = useState(true);
-  const [dragging, setDragging] = useState(false);
+ 
   //  const [cards,setCards] = useState();
 
   useEffect(() => {
   console.log("Tasks in Container:", tasks);
   }, [tasks]);
-
-
-       const handleDrop = (e) => {
-           e.preventDefault();
-          // const  item = e.dataTransfer.getData('text/plain', e.target.id);
-          //  alert(`Dropped item: ${item}`);
-          //  console.log("dragged item",{item});
-            setDragging(false);
-            
-          
-      
-          
-    const task = e.dataTransfer.getData('task',tasks);
-    
-    // e.target.appendChild(document.getElementById(task));
-   
-    const newState = title.toUpperCase().replace(" ", "-");
-    if (task.state !== newState) {
-      moveTaskToState(task.state, newState, task,task._id);
-      console.log(newState);
-      console.log(task.state);
-      }
-       }
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
- 
   
- 
+    const [{ isOver }, drop] = useDrop(() => ({
+     
+      accept: ItemTypes.TASK,
+      drop: (item) => {
+        moveTaskToState(item.state, state.dataIndex, item, item.id);
+        //  return { state: state.dataIndex };
+      },
+      // collect: (monitor) => ({
+      //   isOver: monitor.isOver(),
+      // }),
+    }));
+
   return (
-    
-   
-    <div className={styles.tasks_container}   >
-       
-      <div className={styles.container_title}>
+    <div ref={drop} className={styles.tasks_container} >
+        <div className={styles.container_title}>
         <h3>{title}</h3>
         <div>
           <span onClick={() => showPopupModal(TaskForm, { addTask })}>
@@ -80,11 +54,10 @@ function Container({
           </span>
         </div>
       </div>
-      <main onDrop={handleDrop}  
-       onDragOver={handleDragOver}>
+      <main>
         {!loading ? (
           tasks.map((task) => {
-              const uniqueKey = uuidv4();
+              // const uniqueKey = uuidv4();
           //  console.log('Task Key:', uniqueKey);
           
             return (
@@ -93,14 +66,12 @@ function Container({
                 deleteTask={deleteTask}
                 updateTask={updateTask}
                 showPopupModal={showPopupModal}
-                key={uniqueKey}
+                key={task._id}
                 task={task}
                 moveTaskToState={moveTaskToState}
                 collapseAll={collapseAll}
                 setCollapseAll={setCollapseAll}
                 toggleCheck={toggleCheck}
-                dragging={dragging}
-                setDragging={setDragging}
               />
             );
         
@@ -114,11 +85,6 @@ function Container({
       
       </main>
     </div>
-  
-  
-  
-  
-  
   ) ;
 }
 export default Container;

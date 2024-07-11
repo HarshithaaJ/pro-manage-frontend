@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect,useRef } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import styles from "../css/TaskCard.module.scss";
 import { format, isPast, isToday } from "date-fns";
 import { BsThreeDots } from "react-icons/bs";
@@ -9,9 +9,9 @@ import TaskForm from "./TaskForm";
 import DeletePopup from "./DeletePopup";
 import { useOutletContext } from "react-router-dom";
 import Spinner from '../Spinner';
-import { getAllTasks } from "../../apis/tasks";
-// import { ItemTypes } from './constants';
-// import { useDrag, useDrop } from 'react-dnd';
+// import { getAllTasks } from "../../apis/tasks";
+import { ItemTypes } from './constants';
+ import { useDrag } from 'react-dnd';
 
 
 
@@ -40,9 +40,8 @@ function TaskCard({
   updateTask,
   deleteTask,
   toggleCheck,
-  key,
-  dragging,
-  setDragging
+  
+  
 }) {
   const [showChecklist, setShowChecklist] = useState(false);
   const [showTaskOptions, setShowTaskOptions] = useState(false);
@@ -86,9 +85,6 @@ function TaskCard({
     return task.state === "done" ? "#63C05B" : (isPast ? "#CF3636" : "#DBDBDB");
   };
 
-
-
-
   const handleMoveTask = (currentState, newState, task, taskId) => {
     setLoading(true);
 
@@ -102,45 +98,35 @@ function TaskCard({
     }, 1000);
   };
 
-
-
   
-  
-function TaskCard(e) {
-  e.preventDefault();
-  // const data = e.dataTransfer.setData("text", e.target.id);
-  // console.log(data);
- 
-    e.dataTransfer.setData("item", { id: task.id, state: task.state });
-    
-    
-      setDragging(true);
-      console.log(task.state);
-    
- 
-    // e.target.appendChild(document.getElementById(data));
-}
-
-// const handleDragStart = (e) => {
-//   e.preventDefault();
-//   e.dataTransfer.setData("task-id", task._id);
-//   e.dataTransfer.setData("task-state", task.state);
-// };
-
-
- 
+    const [{ isDragging }, drag] = useDrag(() => ({
+      type: ItemTypes.TASK,
+      item: { id: task._id, state: task.state },
+      end:  (item, monitor) => {
+        const dropResult = monitor.getDropResult();
+        if (item && dropResult) {
+          try {
+             moveTaskToState(task.state, dropResult.state, task, task._id);
+          } catch (error) {
+            console.error('Error moving task:', error);
+          }
+        }
+      },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+    }));
+    const opacity = isDragging ? 0.5 : 1 ;
+    //console.log("Task Object: ", task);
   return (
     
-    <div  onDragOver={(e)=>{TaskCard(e,'item 1') }}
-     draggable='true' 
-      id={key} 
-      // onDragEnd={(e) => setDragging(false)}
-      
-      className={styles.task_card}>
+    <div  ref={drag} style={{opacity}}
+     className={styles.task_card}>
       <div  className={styles.header}>
         <span>
           <span style={{ color: priorityColors[task.priority] }}>&bull;</span>{" "}
-          {task.priority.toUpperCase()} PRIORITY
+           {task.priority ? task.priority.toUpperCase()  : "NO PRIORITY"} 
+          {/* {task.priority.toUpperCase()} PRIORITY */}
         </span>
         <div>
           <span
@@ -189,7 +175,8 @@ function TaskCard(e) {
       <h3
         data-tooltip-id="title-tooltip"
         data-tooltip-content={task.title}
-        data-tooltip-hidden={task.title.length < 60}
+         data-tooltip-hidden={task.title && task.title.length < 60} 
+        //  data-tooltip-hidden={task.title.length < 60}
       >
         {task.title.length > 60
           ? task.title.substring(0, 61) + "..."
@@ -204,10 +191,14 @@ function TaskCard(e) {
         <div>
           <h4>
             Checklist (
-            {`${task.checklists.reduce(
+              {`${task.checklists ? task.checklists.reduce(
               (acc, list) => (list.isChecked ? acc + 1 : acc),
               0
-            )}/${task.checklists.length}`}
+            ) : 0}/${task.checklists ? task.checklists.length : 0}`}
+            {/* {`${task.checklists.reduce(
+              (acc, list) => (list.isChecked ? acc + 1 : acc),
+              0
+            )}/${task.checklists.length}`} */}
             )
           </h4>
           <span
@@ -365,3 +356,16 @@ export default TaskCard
 //     const backgroundColor = isOver ? '#f0f0f0' : '#ffffff';
    
 // drag(drop(ref))
+
+
+
+// const handleDragStart = (e) => {
+//   e.preventDefault();
+//   e.dataTransfer.setData("task-id", task._id);
+//   e.dataTransfer.setData("task-state", task.state);
+// };
+
+// task.addEventListener('dragstart', function (event) {
+//   event.target.id = "taskid";
+//   event.dataTransfer.setData("taskItem", event.target.id);
+//   }, false);

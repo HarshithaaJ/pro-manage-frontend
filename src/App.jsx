@@ -12,6 +12,7 @@ import Settings from "./pages/Settings.jsx";
 import Spinner from "./components/Spinner.jsx";
 import ViewTask from "./pages/ViewTask.jsx";
 
+
 function App() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({

@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { getAllTasks, updateTaskChecklist, updateTaskState } from "../apis/tasks";
 import { IoIosArrowDown } from "react-icons/io";
-// import { DndProvider } from 'react-dnd';
-// import { HTML5Backend } from 'react-dnd-html5-backend';
+ import { DndProvider } from 'react-dnd';
+ import { HTML5Backend } from 'react-dnd-html5-backend';
 //
 
 const formattedDate = format(new Date(), "do MMM, yyyy");
@@ -67,7 +67,10 @@ function Dashboard() {
         [from]: prev[from].filter((task) => task._id !== taskId),
         [to]: [...prev[to], task]
       };
-    });
+
+    }
+  );
+    
   };
 
   const addTask = (task) => {
@@ -150,11 +153,12 @@ function Dashboard() {
           </div>
         </section>
       </section>
-      {/* <DndProvider backend={HTML5Backend}> */}
+       <DndProvider backend={HTML5Backend}> 
       <main className={styles.states_container}>
         {tasksState.map((state) => (
           <div key={state.dataIndex}>
             <Container
+              state={state}
               showPopupModal={showPopupModal}
               loading={loading}
               tasks={tasksData[state.dataIndex]}
@@ -164,11 +168,13 @@ function Dashboard() {
               updateTask={updateTask}
               deleteTask={deleteTask}
               toggleCheck={toggleCheck}
+           
+              
             />
           </div>
         ))}
       </main>
-      {/* </DndProvider> */}
+       </DndProvider> 
     </div>
   );
 }
