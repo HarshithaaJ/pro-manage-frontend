@@ -33,7 +33,7 @@ function Container({
      
       accept: ItemTypes.TASK,
       drop: (item) => {
-        moveTaskToState(item.state, state.dataIndex, item, item.id);
+        moveTaskToState(item.state, state.dataIndex, item, item._id);
         //  return { state: state.dataIndex };
       },
       // collect: (monitor) => ({

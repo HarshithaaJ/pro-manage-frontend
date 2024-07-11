@@ -101,17 +101,17 @@ function TaskCard({
   
     const [{ isDragging }, drag] = useDrag(() => ({
       type: ItemTypes.TASK,
-      item: { id: task._id, state: task.state },
-      end:  (item, monitor) => {
-        const dropResult = monitor.getDropResult();
-        if (item && dropResult) {
-          try {
-             moveTaskToState(task.state, dropResult.state, task, task._id);
-          } catch (error) {
-            console.error('Error moving task:', error);
-          }
-        }
-      },
+      item: task,
+      // end:  (item, monitor) => {
+      //   const dropResult = monitor.getDropResult();
+      //   if (item && dropResult) {
+      //     try {
+      //        moveTaskToState(task.state, dropResult.state, task, task._id);
+      //     } catch (error) {
+      //       console.error('Error moving task:', error);
+      //     }
+      //   }
+      // },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
